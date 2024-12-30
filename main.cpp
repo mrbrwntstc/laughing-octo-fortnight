@@ -102,6 +102,7 @@ int main()
     vector::instance<3> cross = vector::cross_product(v1,v2);
 
     std::cout << cross << std::endl;
+    std::cout << std::endl;
   }
 
   { // 3.9 unit vector
@@ -109,6 +110,15 @@ int main()
     vector::instance<2> v1_unit = vector::unit_vector(v1);
 
     std::cout << v1_unit << std::endl;
+    std::cout << std::endl;
+  }
+
+  { // 5.4 matrices - the transpose operation
+    matrix::instance<2,3> matrix = {{1,2,3},{4,5,6}};
+    matrix::instance<3,2> transpose = matrix::transpose(matrix);
+
+    std::cout << matrix << std::endl;
+    std::cout << transpose << std::endl;
   }
 
   return 0;

@@ -78,6 +78,18 @@ namespace matrix
     }
     return out;
   }
+
+  // 5.4 matrices - the transpose operation
+  template<std::size_t R, std::size_t C>
+  instance<C,R> transpose(const instance<R,C>& matrix)
+  {
+    instance<C,R> result;
+    for(std::size_t row = 0; row < R; ++row)
+      for(std::size_t col = 0; col < C; ++col)
+        result[col][row] = matrix[row][col];
+    
+    return result;
+  }
 } // namespace matrix
 
 namespace vector
