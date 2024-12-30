@@ -12,4 +12,4 @@ if [ ! -d "$BUILD_DIR" ]; then
     mkdir "$BUILD_DIR"
 fi
 
-clang++ -std=c++11 -o "$BUILD_DIR/$EXE_NAME" $SRC_FILES
+clang++ -g -std=c++11 -o "$BUILD_DIR/$EXE_NAME" $SRC_FILES
