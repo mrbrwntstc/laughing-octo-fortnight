@@ -121,5 +121,58 @@ int main()
     std::cout << transpose << std::endl;
   }
 
+  { // 5.5 matrix zoology
+    { // square/rectangular matrices
+      matrix::instance<2,2> matrix = {{0,1}, {-1, 0}};
+      matrix::instance<2,3> matrix2; // zeroes matrix
+      std::cout << matrix << " is a square matrix: " << (matrix::is_square(matrix) ? "true" : "false") << std::endl;
+      std::cout << matrix2 << " is a square matrix: " << (matrix::is_square(matrix2) ? "true" : "false") << std::endl;
+    }
+    { // symmetric matrices
+      matrix::instance<3,3> matrix = 
+      {{1,4,5},
+       {4,7,2},
+       {5,2,0}};
+      
+      std::cout << "matrix\n" << matrix << std::endl;
+      std::cout << "matrix transposed\n" << matrix::transpose(matrix) << std::endl;
+      std::cout << "is symmetric: " << (matrix::is_symmetric(matrix) ? "true" : "false") << std::endl; // true
+    }
+    { // identity matrix
+      matrix::instance<2,2> identity(1.0f);
+      std::cout << identity << std::endl;
+    }
+
+    { // zeroes matrix
+      matrix::instance<2,2> zeroes;
+      std::cout << zeroes << std::endl;
+    }
+
+    { // augmented matrix
+      matrix::instance<3,3> mat1 = {{1,4,2}, {3,1,9}, {4,2,0}};
+      matrix::instance<3,2> mat2 = {{7,2}, {7,2}, {7,1}};
+      matrix::instance<3,5> mat_augmented = matrix::augment(mat1, mat2);
+      std::cout << mat1 << std::endl;
+      std::cout << mat2 << std::endl;
+      std::cout << mat_augmented << std::endl;
+    }
+
+    { // triangular matrices
+      matrix::instance<3,3> mat1 = {{1,8,4}, {0,2,1}, {0,0,9}};
+      std::cout << mat1 << std::endl;
+      std::cout << "is upper triangular: " << (matrix::is_upper_triangular(mat1) ? "true" : "false") << std::endl;
+      std::cout << "is triangular: " << (matrix::is_triangular(mat1) ? "true" : "false") << std::endl;
+
+      matrix::instance<3,5> mat2 = {{1,0,0,0,0}, {3,2,0,0,0}, {6,0,9,0,0}};
+      std::cout << mat2 << std::endl;
+      std::cout << "is lower trianglular: " << (matrix::is_lower_triangular(mat2) ? "true" : "false") << std::endl;
+      std::cout << "is triangular: " << (matrix::is_triangular(mat2) ? "true" : "false") << std::endl;
+    }
+
+    { // orthogonal matrices
+      // cannot test until chapter 6
+    }
+  }
+
   return 0;
 }

@@ -35,6 +35,14 @@ namespace matrix
       for(auto& row : _data)
         row.fill(0.f);
     }
+
+    instance(float diagonal)
+    {
+      for(std::size_t row = 0; row < R; ++row)
+        for(std::size_t col = 0; col < C; ++col)
+          this->_data[row][col] = (row == col) ? diagonal : 0.f;
+    }
+
     // matrix::instance<2, 3> mat2{{ {1.0f, 2.0f, 3.0f}, {4.0f, 5.0f, 6.0f} }};
     instance(std::initializer_list<std::initializer_list<float>> list)
     {
@@ -90,6 +98,95 @@ namespace matrix
     
     return result;
   }
+
+  // 5.5 matrix zoology
+  // ---
+  template<std::size_t R1, std::size_t R2, std::size_t C1, std::size_t C2>
+  bool operator==(const instance<R1,C1>& matrix1, const instance<R2,C2>& matrix2)
+  {
+    if(&matrix1 == &matrix2)
+      return true; // self
+    if((R1 != R2) || (C1 != C2))
+      return false; // different dimensions
+    
+    for(std::size_t row = 0; row < R1; ++row)
+      for(std::size_t col = 0; col < C1; ++col)
+        if(matrix1[row][col] != matrix2[row][col])
+          return false;
+
+    return true;
+  }
+  template<std::size_t R, std::size_t C>
+  inline bool is_square(const instance<R,C>& matrix)
+  {
+    return R == C;
+  }
+
+  // true implies the matrix is a square matrix
+  template<std::size_t R, std::size_t C>
+  inline bool is_symmetric(const instance<R,C>& matrix)
+  {
+    return matrix == transpose(matrix);
+  }
+
+  template<std::size_t R, std::size_t C>
+  inline bool is_skew_symmetric(const instance<R,C>& matrix)
+  {
+    for(std::size_t row = 0; row < R; ++row)
+      for(std::size_t col = 0; col < C; ++col)
+        if(matrix[row][col] != -matrix[col][row])
+          return false;
+    
+    return true;
+  }
+
+  template<std::size_t R1, std::size_t R2, std::size_t C1, std::size_t C2>
+  instance<R1, C1+C2> augment(const instance<R1,C1>& mat1, const instance<R2,C2>& mat2)
+  {
+    assert(R1 == R2);
+    instance<R1,C1+C2> result;
+    for(std::size_t row = 0; row < R1; ++row)
+      for(std::size_t col = 0; col < C1; ++col)
+        result[row][col] = mat1[row][col];
+    for(std::size_t row = 0; row < R2; ++row)
+      for(std::size_t col = 0; col < C2; ++col)
+        result[row][C1 + col] = mat2[row][col];
+    return result;
+  }
+
+  template<std::size_t R, std::size_t C>
+  bool is_upper_triangular(const instance<R,C> mat)
+  {
+    // all values in the lower triangle, before the diagonal, must be 0
+    for(std::size_t row = 1; row < R; ++row)
+      for(std::size_t col = 0; col < row; ++col)
+        if(mat[row][col] != 0) return false;
+    return true;
+  }
+
+  template<std::size_t R, std::size_t C>
+  bool is_lower_triangular(const instance<R,C> mat)
+  {
+    // all values in the upper triangle, after the diagonal, must be 0
+    for(std::size_t row = 0; row < R; ++row)
+      for(std::size_t col = row + 1; col < C; ++col)
+        if(mat[row][col] != 0) return false;
+    return true;
+  }
+
+  template<std::size_t R, std::size_t C>
+  bool is_triangular(const instance<R,C> mat)
+  {
+    return is_lower_triangular(mat) || is_upper_triangular(mat);
+  }
+
+  // cannot test yet
+  // template<std::size_t R, std::size_t C>
+  // bool is_orthogonal(const instance<R,C> mat)
+  // {
+  //   return (matrix::transpose(mat) * mat) == matrix::instance<R,C>(1.0f);
+  // }
+  // --- 5.5
 } // namespace matrix
 
 namespace vector
